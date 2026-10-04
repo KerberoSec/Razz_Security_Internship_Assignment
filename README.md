@@ -11,7 +11,7 @@ This guide provides step-by-step instructions for setting up, running, and explo
 ## Challenge Details
 - **Category:** Web Security  
 - **Difficulty:** Easy  
-- **Vulnerability Type:** SQL Injection – Authentication Bypass  
+- **Vulnerability Type:** SQL Injection (Authentication Bypass)  
 - **Flag Format:** `RAZZ{sql1_bYP4sS_MAst3r}`  
 
 ---
